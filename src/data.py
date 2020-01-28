@@ -63,7 +63,7 @@ class Dataset(data.Dataset):
         # flist: image file path, image directory path, text file flist path
         if isinstance(flist, str):
             if os.path.isdir(flist):
-                flist = list(glob.glob(flist + '/*.jpg')) + list(glob.glob(flist + '/*.png'))
+                flist = list(glob.glob(flist + '/**/*.jpg')) + list(glob.glob(flist + '/**/*.png'))
                 flist.sort()
                 return flist
 
@@ -86,7 +86,13 @@ class Dataset(data.Dataset):
         inpaint_map = self.load_mask(index, gt_image)
         input_image = gt_image*(1-inpaint_map)
 
-        return input_image, structure_image, gt_image, inpaint_map
+        ch, y, x = input_image.shape
+        pad_y = (16 - y % 16) % 16
+        pad_x = (16 - x % 16) % 16
+        images = (input_image, structure_image, gt_image, inpaint_map)
+        images = tuple(F.pad(image, (0,pad_x,0,pad_y), 'constant', 0) for image in images)
+
+        return images
 
 
     def load_mask(self, index, img):
@@ -233,7 +239,7 @@ def bbox2mask( bboxs, shape, config):
       
 
 def gray_loader( path):
-    return Image.open(path)
+    return Image.open(path).convert('L').point(lambda x: 0 if x < 128 else 256)
 
 def loader( path):
     return Image.open(path).convert('RGB')

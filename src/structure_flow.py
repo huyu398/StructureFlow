@@ -190,7 +190,7 @@ class StructureFlow():
         test_dataset = Dataset(self.config.DATA_TEST_GT, self.config.DATA_TEST_STRUCTURE, self.config, self.config.DATA_TEST_MASK)
         test_loader = DataLoader(
             dataset=test_dataset,
-            batch_size=8,
+            batch_size=1,
         )
 
         index = 0
