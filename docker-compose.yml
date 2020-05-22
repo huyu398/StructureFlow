@@ -1,0 +1,15 @@
+version: '2.4'
+services:
+  app:
+    build: .
+    shm_size: 32g
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    tty: true
+    volumes:
+      - ./result_images:/root/StructureFlow/result_images
+      - ./radius5_test:/root/StructureFlow/radius5_test
+      - ./results:/root/StructureFlow/results
+      - ./src:/root/StructureFlow/src
+    entrypoint: bash

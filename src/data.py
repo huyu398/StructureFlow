@@ -63,7 +63,7 @@ class Dataset(data.Dataset):
         # flist: image file path, image directory path, text file flist path
         if isinstance(flist, str):
             if os.path.isdir(flist):
-                flist = list(glob.glob(flist + '/**/*.jpg')) + list(glob.glob(flist + '/**/*.png'))
+                flist = list(glob.glob(flist + '/*.jpg')) + list(glob.glob(flist + '/*.png'))
                 flist.sort()
                 return flist
 
